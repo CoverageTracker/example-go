@@ -1,0 +1,27 @@
+name: coverage
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  id-token: write   # OIDC → Worker
+  checks: write     # PR Check Run
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - run: go test -coverprofile=coverage.out ./... # writes coverage.out
+
+      - run: go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
+
+      - run: gocyclo -avg -ignore '_test\.go' . > gocyclo.txt
+
+      - uses: CoverageTracker/coverage-tracker/.github/actions/report@v0.2.0
+        with:
+          worker-url: https://demo.coveragetracker.dev
