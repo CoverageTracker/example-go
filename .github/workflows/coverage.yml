@@ -22,6 +22,6 @@ jobs:
 
       - run: gocyclo -avg -ignore '_test\.go' . > gocyclo.txt
 
-      - uses: CoverageTracker/coverage-tracker/.github/actions/report@v0.2.0
+      - uses: CoverageTracker/coverage-tracker/.github/actions/report@v0.3.0
         with:
           worker-url: https://demo.coveragetracker.dev
